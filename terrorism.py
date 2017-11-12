@@ -4,15 +4,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
-
 import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 print("Inmporting csv")
-input_file = r"globalterroismedited.csv"
+input_file = r"terrorism-all.csv"
 test_perc = 0.40
+
 
 features = pd.read_csv(input_file, header=0, delimiter=';', usecols=range(15))
 labels = pd.read_csv(input_file, header=0, delimiter=';')
@@ -20,7 +20,6 @@ labels = labels['gname']
 
 print("Dividing data in test and train sets, using", test_perc * 100, "% as the test set \n")
 # split the set in training and test sets with a ratio defined by test_perc
-# train, test = train_test_split(ds, test_size=0.25)
 features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=test_perc, random_state=0)
 
 
@@ -45,18 +44,17 @@ print("Accuracy time:", round(end-start, 3), "s \n")
 
 
 # Create a confusion matrix
-cnf_matrix = confusion_matrix(labels_test, pred)
-print("Confusion matrix")
+start = time.time()
+print("Generating confusion matrix")
+cnf_matrix = confusion_matrix(labels_test, pred, labels)
 
 
+# his function prints and plots the confusion matrix.
+# Normalization can be applied by setting `normalize=True`.
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
                           title='Confusion matrix',
                           cmap=plt.cm.Blues):
-    """
-    This function prints and plots the confusion matrix.
-    Normalization can be applied by setting `normalize=True`.
-    """
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         print("Normalized confusion matrix")
@@ -82,8 +80,11 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+# plot_confusion_matrix #
 
-# Plot non-normalized confusion matrix
+# Plot confusion matrix
 plt.figure()
 plot_confusion_matrix(cnf_matrix, classes=labels, title='Confusion matrix, without normalization')
 plt.show()
+end = time.time()
+print("Confusion matrix time:", round(end-start, 3), "s \n")
