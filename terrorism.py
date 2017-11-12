@@ -10,11 +10,11 @@ import matplotlib.pyplot as plt
 
 
 print("Inmporting csv")
-input_file = r"terrorism-all.csv"
+input_file = r"terrorism-2000-2016-less.csv"
 test_perc = 0.40
 
 
-features = pd.read_csv(input_file, header=0, delimiter=';', usecols=range(15))
+features = pd.read_csv(input_file, header=0, delimiter=';', usecols=range(11))
 labels = pd.read_csv(input_file, header=0, delimiter=';')
 labels = labels['gname']
 
